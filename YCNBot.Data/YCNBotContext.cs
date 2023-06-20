@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using YCNBot.Core.Entities;
 
 namespace YCNBot.Data;
 
-public partial class YCNBotContext : DbContext
+public partial class YCNBotContext : DbContext, IDesignTimeDbContextFactory<YCNBotContext>
 {
     public YCNBotContext()
     {
@@ -12,6 +13,14 @@ public partial class YCNBotContext : DbContext
     public YCNBotContext(DbContextOptions<YCNBotContext> options)
         : base(options)
     {
+    }
+
+    public YCNBotContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<YCNBotContext>();
+        optionsBuilder.UseSqlServer("Server=tcp:xxxx.database.windows.net,1433;Initial Catalog=xxxx;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";");
+
+        return new YCNBotContext(optionsBuilder.Options);
     }
 
     public virtual DbSet<Chat> Chats { get; set; }
